@@ -379,3 +379,54 @@ def test_cli_writes_stable_output(tmp_path):
     assert result["stats"]["out_of_range_samples"] == 0
     assert result["stats"]["max_normal_angle_deg"] <= gbuffer.NORMAL_MAX_ANGLE_DEG
     assert result["stats"]["max_rough_abs_error"] <= gbuffer.ROUGH_MAX_ERROR
+
+
+# ===== v2 契约测试：初始全部失败，实现后必须通过 =====
+import gbuffer as broadphase_gbuffer  # noqa: E402
+
+
+def test_negotiate_picks_feasible_layout():
+    cands = [
+        {"normal_bits": 16, "rough_bits": 8, "material_bits": 8},
+        {"normal_bits": 20, "rough_bits": 6, "material_bits": 6},
+        {"normal_bits": 10, "rough_bits": 11, "material_bits": 11},
+    ]
+    r = broadphase_gbuffer.negotiate_layout(cands, max_error_deg=2.0, max_bytes=8)
+    assert r["selected"] is not None
+    assert r["selected"] in (0, 1, 2)
+    assert all(code for _, code in r["rejected"])
+
+
+def test_negotiate_rejects_over_bandwidth():
+    cands = [{"normal_bits": 40, "rough_bits": 16, "material_bits": 16}]
+    r = broadphase_gbuffer.negotiate_layout(cands, max_error_deg=1.0, max_bytes=8)
+    assert r["selected"] is None
+    assert r["rejected"]
+
+
+def test_half_normal_error_bounded():
+    import math
+    dirs = [(1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0),
+            (1 / math.sqrt(3),) * 3, (0.6, 0.8, 0.0)]
+    worst = 0.0
+    for n in dirs:
+        packed = broadphase_gbuffer.pack_pixel_half(n, 0.5, 2)
+        back = broadphase_gbuffer.unpack_pixel(packed)["normal"]
+        dot = sum(a * b for a, b in zip(n, back))
+        worst = max(worst, math.degrees(math.acos(max(-1.0, min(1.0, dot)))))
+    assert worst <= 3.0
+
+
+def test_decode_aligned_rejects_mismatch():
+    try:
+        broadphase_gbuffer.decode_aligned(0xFFFF, {"normal_bits": 10, "rough_bits": 5, "material_bits": 5})
+    except Exception as exc:
+        assert "位" in str(exc) or "width" in str(exc).lower() or "布局" in str(exc)
+    else:
+        raise AssertionError("位宽不一致时必须报错")
+
+
+def test_bandwidth_cost_scales():
+    lay = {"normal_bits": 16, "rough_bits": 8, "material_bits": 8}
+    assert broadphase_gbuffer.bandwidth_cost(lay, 1920, 1080) == 1920 * 1080 * 4
+    assert broadphase_gbuffer.bandwidth_cost(lay, 1, 1) == 4

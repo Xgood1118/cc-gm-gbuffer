@@ -382,3 +382,26 @@ def measure_error(orig, back):
         "rough_error": rough_error,
         "mat_exact": mat_exact,
     }
+
+
+def negotiate_layout(candidates, max_error_deg, max_bytes):
+    """在候选布局中挑选：返回 dict(selected=索引或 None, rejected=[(索引, 理由码)])。
+
+    理由码至少区分误差超限与带宽超限。
+    """
+    raise NotImplementedError("negotiate_layout 尚未实现")
+
+
+def pack_pixel_half(normal, rough, mat):
+    """半精度法线版本：返回整数位串，保持其余通道语义不变。"""
+    raise NotImplementedError("pack_pixel_half 尚未实现")
+
+
+def decode_aligned(packed, layout):
+    """按布局解码；位宽不一致或位溢出必须抛错，不得静默。"""
+    raise NotImplementedError("decode_aligned 尚未实现")
+
+
+def bandwidth_cost(layout, width, height):
+    """返回该布局在给定分辨率下的字节数。"""
+    raise NotImplementedError("bandwidth_cost 尚未实现")
