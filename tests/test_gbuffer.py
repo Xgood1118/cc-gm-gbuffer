@@ -23,6 +23,8 @@ def test_normal_error_bounded():
 
 
 # ===== v2 契约测试：初始全部失败，实现后必须通过 =====
+import gbuffer  # noqa: E402
+
 
 
 def test_negotiate_picks_feasible():

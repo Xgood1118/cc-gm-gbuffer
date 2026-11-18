@@ -12,9 +12,6 @@ class GBuffer:
     mat: int
 
 
-def GBuffer:
-    """class"""
-    raise NotImplementedError("GBuffer 尚未实现")
 
 
 def pack_pixel(normal, rough, mat):
