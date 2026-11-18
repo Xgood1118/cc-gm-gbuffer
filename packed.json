@@ -1,60 +1,65 @@
 {
-  "format": {
-    "azimuth_bits": 9,
-    "material_bits": 8,
-    "normal_bits": 18,
-    "normal_max_angle_deg": 0.5276877446183953,
-    "polar_bits": 9,
-    "rough_bits": 6,
-    "rough_max_error": 0.007936507936507936,
-    "total_bits": 32
+  "layout_32": {
+    "normal_bits": 16,
+    "rough_bits": 8,
+    "material_bits": 8
   },
   "pixels": [
     {
-      "error": {
-        "angle_deg": 0.0,
-        "mat_exact": true,
-        "rough_abs": 0.007936507936507908
-      },
-      "index": 0,
-      "packed": 224,
-      "packed_hex": "0x000000e0",
-      "unpacked": {
-        "mat": 3,
-        "normal": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "rough": 0.507936507937
-      }
+      "packed": 58752895,
+      "packed_half": 252267549830414336
     },
     {
-      "error": {
-        "angle_deg": 0.354278304205656,
-        "mat_exact": true,
-        "rough_abs": 0.004761904761904745
-      },
-      "index": 1,
-      "packed": 2148729657,
-      "packed_hex": "0x80130339",
-      "unpacked": {
-        "mat": 12,
-        "normal": [
-          0.595696490035,
-          0.803203736624,
-          -0.003073960573
-        ],
-        "rough": 0.904761904762
-      }
+      "packed": 216451253,
+      "packed_half": 929430374078363853
     }
   ],
   "stats": {
-    "material_roundtrip_ok": 2,
-    "material_roundtrip_total": 2,
-    "max_normal_angle_deg": 0.354278304205656,
-    "max_rough_abs_error": 0.007936507936507908,
-    "out_of_range_samples": 0,
-    "sample_count": 2
+    "bound_32_deg": 0.9570402808055459,
+    "bound_half_deg": 0.09691329395132914,
+    "rough_bound": 0.00196078431372549,
+    "file_max_angle_32_deg": 0.3786009621147225,
+    "file_max_angle_half_deg": 0.011191674721994742,
+    "file_max_rough_err": 0.0019607843137254832,
+    "survey_max_angle_32_deg": 0.9394662916731943,
+    "survey_max_angle_half_deg": 0.022834630847511125,
+    "survey_samples": 20000
+  },
+  "negotiation": {
+    "candidates": [
+      {
+        "normal_bits": 16,
+        "rough_bits": 8,
+        "material_bits": 8
+      },
+      {
+        "normal_bits": 20,
+        "rough_bits": 6,
+        "material_bits": 6
+      },
+      {
+        "normal_bits": 10,
+        "rough_bits": 11,
+        "material_bits": 11
+      },
+      {
+        "normal_bits": 40,
+        "rough_bits": 16,
+        "material_bits": 16
+      }
+    ],
+    "max_error_deg": 2.0,
+    "max_bytes": 8,
+    "selected": 1,
+    "rejected": [
+      [
+        2,
+        "E_ERROR"
+      ],
+      [
+        3,
+        "E_BANDWIDTH"
+      ]
+    ]
   }
 }
